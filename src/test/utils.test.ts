@@ -49,3 +49,52 @@ describe('groupBy', () => {
         expect(groupByTeamId).toEqual(expectedGroups);
     })
 })
+
+describe('indexBy', () => {
+    it('should index users by Id', () => {
+        const indexedUsers = Utils.indexBy(users, 'id')
+        const expectedUsers = {
+            1: { id: 1, name: "Alice", teamId: 342 },
+            2: { id: 2, name: "Bob", teamId: 342 },
+            3: { id: 3, name: "Cornelius", teamId: 351 },
+            4: { id: 4, name: "Jarvis", teamId: 394 },
+            5: { id: 5, name: "Alice", teamId: 3433 },
+        }
+        expect(indexedUsers).toEqual(expectedUsers);
+    })
+})
+
+describe('findBy', () => {
+    it('should find one user by name of Jarvis', () => {
+        const foundUser = Utils.findBy(users, 'name', 'Jarvis')
+        const expectedUser = { id: 4, name: 'Jarvis', teamId: 394 }
+
+        expect(foundUser).toEqual(expectedUser)
+    })
+
+    it('should find the first user by name of Alice', () => {
+        const foundUser = Utils.findBy(users, 'name', 'Alice');
+        const expectedUser = { id: 1, name: "Alice", teamId: 342 }
+
+        expect(foundUser).toEqual(expectedUser)
+    })
+
+    it('should return undefined for non existant user', () => {
+        const nonUser = Utils.findBy(users, 'name', 'Marko')
+
+        expect(nonUser).toBe(undefined)
+    })
+})
+
+describe('uniqueBy', () => {
+    it('Should omit the second Alice', () => {
+        const uniqueUsers = Utils.uniqueBy(users, 'name')
+        const expectedUsers = [
+            { id: 1, name: "Alice", teamId: 342 },
+            { id: 2, name: "Bob", teamId: 342 },
+            { id: 3, name: "Cornelius", teamId: 351},
+            { id: 4, name: "Jarvis", teamId: 394},
+        ]
+        expect(uniqueUsers).toEqual(expectedUsers);
+    })
+})

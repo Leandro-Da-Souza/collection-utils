@@ -67,5 +67,6 @@ export const Utils = {
     countBy,
     groupBy,
     indexBy,
-    findBy
+    findBy,
+    uniqueBy
 }
