@@ -98,3 +98,28 @@ describe('uniqueBy', () => {
         expect(uniqueUsers).toEqual(expectedUsers);
     })
 })
+
+describe('pluck', () => {
+    it('Should return all the names from the users list', () => {
+        const userNames = Utils.pluck(users, 'name')
+
+        expect(userNames).toEqual(['Alice', 'Bob', 'Cornelius', 'Jarvis', 'Alice'])
+    })
+
+    it('Should return an empty list when the input is empty', () => {
+        const data: any[] = []
+        const empty = Utils.pluck(data, "")
+
+        expect(empty).toEqual([])
+    })
+
+    it('Should pluck numeric values', () => {
+        expect(Utils.pluck(users, "teamId")).toEqual([
+            342,
+            342,
+            351,
+            394,
+            3433,
+        ]);
+    })
+})

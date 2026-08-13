@@ -63,10 +63,26 @@ function uniqueBy<T extends Record<K, PropertyKey>, K extends keyof T>(group: T[
     return result
 }
 
+function pluck<
+    T extends Record<K, PropertyKey>,
+    K extends keyof T
+>(
+    group: T[], property: K
+) {
+    const result: Array<T[K]> = [];
+
+    for (const item of group) {
+        result.push(item[property])
+    }
+
+    return result;
+}
+
 export const Utils = {
     countBy,
     groupBy,
     indexBy,
     findBy,
-    uniqueBy
+    uniqueBy,
+    pluck
 }
