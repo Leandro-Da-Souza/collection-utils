@@ -92,6 +92,25 @@ function partition<T>(group: T[], predicate: (item: T) => boolean) {
     return result;
 }
 
+function sumBy<
+    T extends Record<K, number>,
+    K extends keyof T
+>(
+    group: T[],
+    property: K
+) {
+    let result: number = 0;
+
+    for (const item of group) {
+        if (typeof item[property] !== "number") {
+            throw new Error()
+        };
+        result += item[property]
+    }
+
+    return result;
+}
+
 export const Utils = {
     countBy,
     groupBy,
@@ -99,5 +118,6 @@ export const Utils = {
     findBy,
     uniqueBy,
     pluck,
-    partition
+    partition,
+    sumBy
 }

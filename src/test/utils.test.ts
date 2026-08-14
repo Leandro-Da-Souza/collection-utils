@@ -154,3 +154,30 @@ describe('partition', () => {
         expect(result['true']).toEqual([])
     })
 })
+
+describe('sumBy', () => {
+    const users = [
+        { id: 1, salary: 100 },
+        { id: 2, salary: 250 },
+        { id: 3, salary: 150 },
+    ];
+
+    it('Should sum salaries', () => {
+        const sum = Utils.sumBy(users, 'salary')
+        expect(sum).toBe(500)
+    })
+
+    it('Should return 0 for an empty array', () => {
+        const sum = Utils.sumBy([], 'salary')
+        expect(sum).toBe(0)
+    })
+
+    it('Should work with one item', () => {
+        const sum = Utils.sumBy([users[0]], 'salary')
+        expect(sum).toBe(100)
+    })
+
+    it('Should throw error for non numeric values', () => {
+        expect(() => Utils.sumBy(users, 'name')).toThrow()
+    })
+})
