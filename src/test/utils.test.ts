@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { Utils } from '../index'
 import { users } from '../data/users'
+import {User} from "../types/user.type";
 
 describe('countBy', () => {
     it('should count the users by teamId', () => {
@@ -121,5 +122,35 @@ describe('pluck', () => {
             394,
             3433,
         ]);
+    })
+})
+
+describe('partition', () => {
+    const users = [
+        { id: 1, name: "Alice", teamId: 342, active: true },
+        { id: 2, name: "Bob", teamId: 342, active: false },
+        { id: 3, name: "Cornelius", teamId: 351, active: false },
+        { id: 4, name: "Jarvis", teamId: 394, active: true },
+        { id: 5, name: "Alice", teamId: 3433, active: true },
+    ]
+
+    it('Should partition users', () => {
+        const activeUsers = Utils.partition(users, user => user.active)
+        expect(activeUsers).toEqual({
+            true: [
+                users[0],
+                users[3],
+                users[4],
+            ],
+            false: [
+                users[1],
+                users[2],
+            ],
+        });
+    })
+
+    it('Should return empty array for empty input', () => {
+        const result = Utils.partition([], () => false)
+        expect(result['true']).toEqual([])
     })
 })

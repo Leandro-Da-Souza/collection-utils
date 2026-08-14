@@ -78,11 +78,26 @@ function pluck<
     return result;
 }
 
+function partition<T>(group: T[], predicate: (item: T) => boolean) {
+    const result: Record<boolean, T[]> = {
+        true: [],
+        false: []
+    }
+
+    for (const item of group) {
+        const key = predicate(item)
+        result[key].push(item)
+    }
+
+    return result;
+}
+
 export const Utils = {
     countBy,
     groupBy,
     indexBy,
     findBy,
     uniqueBy,
-    pluck
+    pluck,
+    partition
 }
