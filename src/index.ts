@@ -134,6 +134,24 @@ function maxBy<T>(
     return result
 }
 
+function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
+    if(!group.length) return [];
+
+    const _mutable: T[] = [...group]
+
+    for (let i = 0; i < _mutable.length; i++) {
+        for(let j = i + 1; j < _mutable.length; j++) {
+            if (selector(_mutable[i]) > selector(_mutable[j])) {
+                const temp = _mutable[i]
+                _mutable[i] = _mutable[j]
+                _mutable[j] = temp
+            }
+        }
+    }
+
+    return _mutable
+}
+
 export const Utils = {
     countBy,
     groupBy,
@@ -143,5 +161,6 @@ export const Utils = {
     pluck,
     partition,
     sumBy,
-    maxBy
+    maxBy,
+    sortBy
 }

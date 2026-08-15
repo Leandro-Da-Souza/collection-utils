@@ -197,3 +197,34 @@ describe('maxBy', () => {
         expect(Utils.maxBy([users[0]], user => user.salary)).toEqual({id: 1, salary: 100})
     });
 })
+
+describe('sortBy', () => {
+    const users = [
+        { id: 1, salary: 100 },
+        { id: 2, salary: 250 },
+        { id: 3, salary: 150 },
+    ]
+
+    it("sorts ascending", () => {
+        const ascending = Utils.sortBy(users, user => user.salary)
+        expect(ascending).toEqual([
+            { id: 1, salary: 100 },
+            { id: 3, salary: 150 },
+            { id: 2, salary: 250 }
+        ])
+    });
+    it("returns an empty array", () => {
+        expect(Utils.sortBy([], () => Infinity)).toEqual([])
+    });
+    it("returns a new array", () => {
+        const sorted = Utils.sortBy(users, user => user.salary);
+        expect(sorted).not.toBe(users)
+    });
+    it("does not modify the original", () => {
+        const original = [...users];
+
+        Utils.sortBy(users, user => user.salary);
+
+        expect(users).toEqual(original);
+    });
+})
