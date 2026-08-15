@@ -165,6 +165,20 @@ function chunk<T>(group: readonly T[], size: number) {
     return result;
 }
 
+function zip<T, U>(first: readonly T[], second: readonly U[]) {
+    if (first.length === 0 || second.length === 0) return []
+
+    const min = Math.min(first.length, second.length)
+    const result: [T,U][] = []
+
+    for(let i = 0; i < min; i++) {
+        const subArr:[T, U] = [first[i], second[i]]
+        result.push(subArr)
+    }
+
+    return result;
+}
+
 export const Utils = {
     countBy,
     groupBy,
@@ -176,5 +190,6 @@ export const Utils = {
     sumBy,
     maxBy,
     sortBy,
-    chunk
+    chunk,
+    zip
 }

@@ -263,3 +263,36 @@ describe("chunk", () => {
         expect(() => Utils.chunk([1,2,3], 0)).toThrow()
     });
 });
+
+describe("zip", () => {
+    it("zips two arrays together", () => {
+        expect(Utils.zip([1,2,3], [1,2,3])).toEqual([
+            [1,1],
+            [2,2],
+            [3,3]
+        ])
+    });
+    it("stops at the shorter array", () => {
+        expect(Utils.zip([1,2,3],[1])).toEqual([
+            [1,1]
+        ])
+        expect(Utils.zip([1], [1,2,3])).toEqual([
+            [1,1]
+        ])
+    });
+    it("returns an empty array if either input is empty", () => {
+        expect(Utils.zip([],[1,2,3])).toEqual([])
+    });
+    it("does not mutate either array", () => {
+        const first = [1,2,3];
+        const second = ["one","two","three"];
+
+        const firstCopy = [...first];
+        const secondCopy = [...second];
+
+        Utils.zip(first, second);
+
+        expect(first).toEqual(firstCopy);
+        expect(second).toEqual(secondCopy);
+    });
+});
