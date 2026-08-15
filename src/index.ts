@@ -152,6 +152,19 @@ function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
     return _mutable
 }
 
+function chunk<T>(group: readonly T[], size: number) {
+    if (group.length === 0) return [];
+    if (size <= 0) throw new Error('Chunk size must be greater than 0.')
+
+    const result: Array<T[]>= [];
+
+    for(let i = 0; i < group.length; i += size) {
+        result.push(group.slice(i, i + size))
+    }
+
+    return result;
+}
+
 export const Utils = {
     countBy,
     groupBy,
@@ -162,5 +175,6 @@ export const Utils = {
     partition,
     sumBy,
     maxBy,
-    sortBy
+    sortBy,
+    chunk
 }

@@ -1,7 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { Utils } from '../index'
 import { users } from '../data/users'
-import {User} from "../types/user.type";
+
+/**
+| Matcher         | Meaning                                                    |
+| --------------- | ---------------------------------------------------------- |
+| `toBe()`        | Same value (primitives) or same reference (objects/arrays) |
+| `toEqual()`     | Deeply equal contents                                      |
+| `not.toBe()`    | Different reference                                        |
+| `not.toEqual()` | Different contents                                         |
+*/
 
 describe('countBy', () => {
     it('should count the users by teamId', () => {
@@ -228,3 +236,30 @@ describe('sortBy', () => {
         expect(users).toEqual(original);
     });
 })
+
+describe("chunk", () => {
+    const numbers = [1, 2, 3, 4, 5, 6, 7];
+    it("chunks an array into groups of the given size", () => {
+        const chunked = Utils.chunk(numbers, 3);
+        expect(chunked).toEqual([
+            [1,2,3],
+            [4,5,6],
+            [7]
+        ])
+    });
+    it("returns one chunk when size exceeds array length", () => {
+        const chunked = Utils.chunk(numbers, 9);
+        expect(chunked.length).toEqual(1);
+    });
+    it("returns an empty array for empty input", () => {
+        expect(Utils.chunk([], 3)).toEqual([])
+    });
+    it("does not mutate the original array", () => {
+        const original = [...numbers];
+        Utils.chunk(numbers, 3);
+        expect(original).toEqual(numbers)
+    });
+    it("throws when size is less than 1", () => {
+        expect(() => Utils.chunk([1,2,3], 0)).toThrow()
+    });
+});
