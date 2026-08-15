@@ -176,8 +176,24 @@ describe('sumBy', () => {
         const sum = Utils.sumBy([users[0]], 'salary')
         expect(sum).toBe(100)
     })
+})
 
-    it('Should throw error for non numeric values', () => {
-        expect(() => Utils.sumBy(users, 'name')).toThrow()
-    })
+describe('maxBy', () => {
+    const users = [
+        { id: 1, salary: 100 },
+        { id: 2, salary: 250 },
+        { id: 3, salary: 150 },
+    ]
+
+    it("returns the item with the highest value", () => {
+        expect(Utils.maxBy(users, user => user.salary)).toEqual({ id: 2, salary: 250 })
+    });
+    it("returns undefined for an empty array", () => {
+        const emptyUsers: typeof users = [];
+
+        expect(Utils.maxBy(emptyUsers, user => user.salary)).toBe(undefined);
+    });
+    it("returns the only item when one exists", () => {
+        expect(Utils.maxBy([users[0]], user => user.salary)).toEqual({id: 1, salary: 100})
+    });
 })

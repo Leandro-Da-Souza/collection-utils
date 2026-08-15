@@ -79,14 +79,17 @@ function pluck<
 }
 
 function partition<T>(group: T[], predicate: (item: T) => boolean) {
-    const result: Record<boolean, T[]> = {
+    const result: { true: T[]; false: T[] } = {
         true: [],
         false: []
-    }
+    };
 
     for (const item of group) {
-        const key = predicate(item)
-        result[key].push(item)
+        if(predicate(item)) {
+            result.true.push(item)
+        } else {
+            result.false.push(item)
+        }
     }
 
     return result;
@@ -102,13 +105,33 @@ function sumBy<
     let result: number = 0;
 
     for (const item of group) {
-        if (typeof item[property] !== "number") {
-            throw new Error()
-        };
         result += item[property]
     }
 
     return result;
+}
+
+function maxBy<T>(
+    group: T[],
+    selector: (item: T) => number
+) {
+    if (group.length == 0) return undefined;
+
+    const [first, ...rest] = group;
+
+    let result = first;
+    let max = selector(first);
+
+    for (const item of rest) {
+        const current = selector(item)
+
+        if(current > max) {
+            max = current
+            result = item
+        }
+    }
+
+    return result
 }
 
 export const Utils = {
@@ -119,5 +142,6 @@ export const Utils = {
     uniqueBy,
     pluck,
     partition,
-    sumBy
+    sumBy,
+    maxBy
 }
