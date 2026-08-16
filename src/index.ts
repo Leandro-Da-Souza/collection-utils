@@ -45,7 +45,7 @@ function indexBy<T>(
 }
 
 function findBy<T, U>(
-    group: T[],
+    group: readonly T[],
     selector: (item: T) => U,
     value: U
 ) {
@@ -57,12 +57,15 @@ function findBy<T, U>(
     return undefined;
 }
 
-function uniqueBy<T extends Record<K, PropertyKey>, K extends keyof T>(group: T[], property: K){
-    const seen: Record<PropertyKey, boolean> = {}
+function uniqueBy<T>(
+    group: readonly T[],
+    selector: (item: T) => PropertyKey
+){
+    const seen: Record<PropertyKey, true> = {}
     const result: T[] = [];
 
     for (const item of group) {
-        const key = item[property];
+        const key = selector(item);
         if (!seen[key]) {
             seen[key] = true;
             result.push(item)
@@ -71,16 +74,14 @@ function uniqueBy<T extends Record<K, PropertyKey>, K extends keyof T>(group: T[
     return result
 }
 
-function pluck<
-    T extends Record<K, PropertyKey>,
-    K extends keyof T
->(
-    group: T[], property: K
+function pluck<T, U>(
+    group: readonly T[],
+    selector: (item: T) => U
 ) {
-    const result: Array<T[K]> = [];
+    const result: U[] = [];
 
     for (const item of group) {
-        result.push(item[property])
+        result.push(selector(item))
     }
 
     return result;

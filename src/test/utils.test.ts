@@ -96,7 +96,7 @@ describe('findBy', () => {
 
 describe('uniqueBy', () => {
     it('Should omit the second Alice', () => {
-        const uniqueUsers = Utils.uniqueBy(users, 'name')
+        const uniqueUsers = Utils.uniqueBy(users, user => user.name)
         const expectedUsers = [
             { id: 1, name: "Alice", teamId: 342 },
             { id: 2, name: "Bob", teamId: 342 },
@@ -109,20 +109,20 @@ describe('uniqueBy', () => {
 
 describe('pluck', () => {
     it('Should return all the names from the users list', () => {
-        const userNames = Utils.pluck(users, 'name')
+        const userNames = Utils.pluck(users, user => user.name)
 
         expect(userNames).toEqual(['Alice', 'Bob', 'Cornelius', 'Jarvis', 'Alice'])
     })
 
     it('Should return an empty list when the input is empty', () => {
         const data: any[] = []
-        const empty = Utils.pluck(data, "")
+        const empty = Utils.pluck(data, () => "")
 
         expect(empty).toEqual([])
     })
 
     it('Should pluck numeric values', () => {
-        expect(Utils.pluck(users, "teamId")).toEqual([
+        expect(Utils.pluck(users, user => user.teamId)).toEqual([
             342,
             342,
             351,
