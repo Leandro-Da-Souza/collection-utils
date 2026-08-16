@@ -37,7 +37,7 @@ describe('countBy', () => {
 
 describe('groupBy', () => {
     it('should group the users by teamId', () => {
-        const groupByTeamId = Utils.groupBy(users, 'teamId')
+        const groupByTeamId = Utils.groupBy(users, user => user.teamId)
         const expectedGroups = {
             342: [
                 {id: 1, name: "Alice", teamId: 342},

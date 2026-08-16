@@ -16,11 +16,14 @@ function countBy<
     return result;
 }
 
-function groupBy<T extends Record<K, PropertyKey>, K extends keyof T>(group: T[], property: K) {
+function groupBy<T>(
+    group: readonly T[],
+    selector: (item: T) => PropertyKey)
+{
     const result: Record<PropertyKey, T[]> = {};
 
     for (const item of group) {
-        const key = item[property]
+        const key = selector(item)
         if(!result[key]) result[key] = []
         result[key].push(item)
     }
