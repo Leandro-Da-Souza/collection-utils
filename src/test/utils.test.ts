@@ -1,5 +1,18 @@
 import { describe, it, expect } from "vitest";
-import { Utils } from '../index'
+import {
+    countBy,
+    groupBy,
+    indexBy,
+    findBy,
+    uniqueBy,
+    pluck,
+    partition,
+    sumBy,
+    maxBy,
+    sortBy,
+    chunk,
+    zip
+} from '../index'
 import { users } from '../data/users'
 
 /**
@@ -13,7 +26,7 @@ import { users } from '../data/users'
 
 describe('countBy', () => {
     it('should count the users by teamId', () => {
-        const countByTeamId = Utils.countBy(users, user => user.teamId)
+        const countByTeamId = countBy(users, user => user.teamId)
         const expectedTeamCount = {
             342: 2,
             351: 1,
@@ -23,21 +36,21 @@ describe('countBy', () => {
         expect(countByTeamId).toStrictEqual(expectedTeamCount)
     })
     it('should expect Alice to appear twice', () => {
-        const countByName = Utils.countBy(users, user => user.name);
+        const countByName = countBy(users, user => user.name);
         const expectedAliceNameCount = {
             "Alice": 2
         }
         expect(countByName).toEqual(expect.objectContaining(expectedAliceNameCount))
     })
     it('should give back an empty record when provided with an empty array', () => {
-        const emptyRecord = Utils.countBy([], () => '')
+        const emptyRecord = countBy([], () => '')
         expect(emptyRecord).toStrictEqual({})
     })
 })
 
 describe('groupBy', () => {
     it('should group the users by teamId', () => {
-        const groupByTeamId = Utils.groupBy(users, user => user.teamId)
+        const groupByTeamId = groupBy(users, user => user.teamId)
         const expectedGroups = {
             342: [
                 {id: 1, name: "Alice", teamId: 342},
@@ -60,7 +73,7 @@ describe('groupBy', () => {
 
 describe('indexBy', () => {
     it('should index users by Id', () => {
-        const indexedUsers = Utils.indexBy(users, user => user.id)
+        const indexedUsers = indexBy(users, user => user.id)
         const expectedUsers = {
             1: { id: 1, name: "Alice", teamId: 342 },
             2: { id: 2, name: "Bob", teamId: 342 },
@@ -74,21 +87,21 @@ describe('indexBy', () => {
 
 describe('findBy', () => {
     it('should find one user by name of Jarvis', () => {
-        const foundUser = Utils.findBy(users, user => user.name, 'Jarvis')
+        const foundUser = findBy(users, user => user.name, 'Jarvis')
         const expectedUser = { id: 4, name: 'Jarvis', teamId: 394 }
 
         expect(foundUser).toEqual(expectedUser)
     })
 
     it('should find the first user by name of Alice', () => {
-        const foundUser = Utils.findBy(users, user => user.name, 'Alice');
+        const foundUser = findBy(users, user => user.name, 'Alice');
         const expectedUser = { id: 1, name: "Alice", teamId: 342 }
 
         expect(foundUser).toEqual(expectedUser)
     })
 
     it('should return undefined for non existant user', () => {
-        const nonUser = Utils.findBy(users, user => user.name, 'Marko')
+        const nonUser = findBy(users, user => user.name, 'Marko')
 
         expect(nonUser).toBe(undefined)
     })
@@ -96,7 +109,7 @@ describe('findBy', () => {
 
 describe('uniqueBy', () => {
     it('Should omit the second Alice', () => {
-        const uniqueUsers = Utils.uniqueBy(users, user => user.name)
+        const uniqueUsers = uniqueBy(users, user => user.name)
         const expectedUsers = [
             { id: 1, name: "Alice", teamId: 342 },
             { id: 2, name: "Bob", teamId: 342 },
@@ -109,20 +122,20 @@ describe('uniqueBy', () => {
 
 describe('pluck', () => {
     it('Should return all the names from the users list', () => {
-        const userNames = Utils.pluck(users, user => user.name)
+        const userNames = pluck(users, user => user.name)
 
         expect(userNames).toEqual(['Alice', 'Bob', 'Cornelius', 'Jarvis', 'Alice'])
     })
 
     it('Should return an empty list when the input is empty', () => {
         const data: any[] = []
-        const empty = Utils.pluck(data, () => "")
+        const empty = pluck(data, () => "")
 
         expect(empty).toEqual([])
     })
 
     it('Should pluck numeric values', () => {
-        expect(Utils.pluck(users, user => user.teamId)).toEqual([
+        expect(pluck(users, user => user.teamId)).toEqual([
             342,
             342,
             351,
@@ -142,7 +155,7 @@ describe('partition', () => {
     ]
 
     it('Should partition users', () => {
-        const activeUsers = Utils.partition(users, user => user.active)
+        const activeUsers = partition(users, user => user.active)
         expect(activeUsers).toEqual({
             true: [
                 users[0],
@@ -157,7 +170,7 @@ describe('partition', () => {
     })
 
     it('Should return empty array for empty input', () => {
-        const result = Utils.partition([], () => false)
+        const result = partition([], () => false)
         expect(result['true']).toEqual([])
     })
 })
@@ -170,17 +183,17 @@ describe('sumBy', () => {
     ];
 
     it('Should sum salaries', () => {
-        const sum = Utils.sumBy(users, user => user.salary)
+        const sum = sumBy(users, user => user.salary)
         expect(sum).toBe(500)
     })
 
     it('Should return 0 for an empty array', () => {
-        const sum = Utils.sumBy([], () => 1)
+        const sum = sumBy([], () => 1)
         expect(sum).toBe(0)
     })
 
     it('Should work with one item', () => {
-        const sum = Utils.sumBy([users[0]], user => user.salary)
+        const sum = sumBy([users[0]], user => user.salary)
         expect(sum).toBe(100)
     })
 })
@@ -193,15 +206,15 @@ describe('maxBy', () => {
     ]
 
     it("returns the item with the highest value", () => {
-        expect(Utils.maxBy(users, user => user.salary)).toEqual({ id: 2, salary: 250 })
+        expect(maxBy(users, user => user.salary)).toEqual({ id: 2, salary: 250 })
     });
     it("returns undefined for an empty array", () => {
         const emptyUsers: typeof users = [];
 
-        expect(Utils.maxBy(emptyUsers, user => user.salary)).toBe(undefined);
+        expect(maxBy(emptyUsers, user => user.salary)).toBe(undefined);
     });
     it("returns the only item when one exists", () => {
-        expect(Utils.maxBy([users[0]], user => user.salary)).toEqual({id: 1, salary: 100})
+        expect(maxBy([users[0]], user => user.salary)).toEqual({id: 1, salary: 100})
     });
 })
 
@@ -213,7 +226,7 @@ describe('sortBy', () => {
     ]
 
     it("sorts ascending", () => {
-        const ascending = Utils.sortBy(users, user => user.salary)
+        const ascending = sortBy(users, user => user.salary)
         expect(ascending).toEqual([
             { id: 1, salary: 100 },
             { id: 3, salary: 150 },
@@ -221,16 +234,16 @@ describe('sortBy', () => {
         ])
     });
     it("returns an empty array", () => {
-        expect(Utils.sortBy([], () => Infinity)).toEqual([])
+        expect(sortBy([], () => Infinity)).toEqual([])
     });
     it("returns a new array", () => {
-        const sorted = Utils.sortBy(users, user => user.salary);
+        const sorted = sortBy(users, user => user.salary);
         expect(sorted).not.toBe(users)
     });
     it("does not modify the original", () => {
         const original = [...users];
 
-        Utils.sortBy(users, user => user.salary);
+        sortBy(users, user => user.salary);
 
         expect(users).toEqual(original);
     });
@@ -239,7 +252,7 @@ describe('sortBy', () => {
 describe("chunk", () => {
     const numbers = [1, 2, 3, 4, 5, 6, 7];
     it("chunks an array into groups of the given size", () => {
-        const chunked = Utils.chunk(numbers, 3);
+        const chunked = chunk(numbers, 3);
         expect(chunked).toEqual([
             [1,2,3],
             [4,5,6],
@@ -247,40 +260,40 @@ describe("chunk", () => {
         ])
     });
     it("returns one chunk when size exceeds array length", () => {
-        const chunked = Utils.chunk(numbers, 9);
+        const chunked = chunk(numbers, 9);
         expect(chunked.length).toEqual(1);
     });
     it("returns an empty array for empty input", () => {
-        expect(Utils.chunk([], 3)).toEqual([])
+        expect(chunk([], 3)).toEqual([])
     });
     it("does not mutate the original array", () => {
         const original = [...numbers];
-        Utils.chunk(numbers, 3);
+        chunk(numbers, 3);
         expect(original).toEqual(numbers)
     });
     it("throws when size is less than 1", () => {
-        expect(() => Utils.chunk([1,2,3], 0)).toThrow()
+        expect(() => chunk([1,2,3], 0)).toThrow()
     });
 });
 
 describe("zip", () => {
     it("zips two arrays together", () => {
-        expect(Utils.zip([1,2,3], [1,2,3])).toEqual([
+        expect(zip([1,2,3], [1,2,3])).toEqual([
             [1,1],
             [2,2],
             [3,3]
         ])
     });
     it("stops at the shorter array", () => {
-        expect(Utils.zip([1,2,3],[1])).toEqual([
+        expect(zip([1,2,3],[1])).toEqual([
             [1,1]
         ])
-        expect(Utils.zip([1], [1,2,3])).toEqual([
+        expect(zip([1], [1,2,3])).toEqual([
             [1,1]
         ])
     });
     it("returns an empty array if either input is empty", () => {
-        expect(Utils.zip([],[1,2,3])).toEqual([])
+        expect(zip([],[1,2,3])).toEqual([])
     });
     it("does not mutate either array", () => {
         const first = [1,2,3];
@@ -289,7 +302,7 @@ describe("zip", () => {
         const firstCopy = [...first];
         const secondCopy = [...second];
 
-        Utils.zip(first, second);
+        zip(first, second);
 
         expect(first).toEqual(firstCopy);
         expect(second).toEqual(secondCopy);

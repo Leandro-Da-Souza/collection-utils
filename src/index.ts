@@ -1,4 +1,4 @@
-function countBy<
+export function countBy<
     T
 > (
     group: readonly T[],
@@ -16,7 +16,7 @@ function countBy<
     return result;
 }
 
-function groupBy<T>(
+export function groupBy<T>(
     group: readonly T[],
     selector: (item: T) => PropertyKey)
 {
@@ -30,7 +30,7 @@ function groupBy<T>(
     return result
 }
 
-function indexBy<T>(
+export function indexBy<T>(
     group: readonly T[],
     selector: (item: T) => PropertyKey)
 {
@@ -44,7 +44,7 @@ function indexBy<T>(
     return result;
 }
 
-function findBy<T, U>(
+export function findBy<T, U>(
     group: readonly T[],
     selector: (item: T) => U,
     value: U
@@ -57,7 +57,7 @@ function findBy<T, U>(
     return undefined;
 }
 
-function uniqueBy<T>(
+export function uniqueBy<T>(
     group: readonly T[],
     selector: (item: T) => PropertyKey
 ){
@@ -74,7 +74,7 @@ function uniqueBy<T>(
     return result
 }
 
-function pluck<T, U>(
+export function pluck<T, U>(
     group: readonly T[],
     selector: (item: T) => U
 ) {
@@ -87,7 +87,7 @@ function pluck<T, U>(
     return result;
 }
 
-function partition<T>(
+export function partition<T>(
     group: readonly T[],
     predicate: (item: T) => boolean)
 {
@@ -107,7 +107,7 @@ function partition<T>(
     return result;
 }
 
-function sumBy<
+export function sumBy<
     T
 >(
     group: readonly T[],
@@ -122,7 +122,7 @@ function sumBy<
     return result;
 }
 
-function maxBy<T>(
+export function maxBy<T>(
     group: readonly T[],
     selector: (item: T) => number
 ) {
@@ -145,7 +145,7 @@ function maxBy<T>(
     return result
 }
 
-function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
+export function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
     if(!group.length) return [];
 
     const sorted: T[] = [...group]
@@ -163,7 +163,7 @@ function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
     return sorted
 }
 
-function chunk<T>(group: readonly T[], size: number) {
+export function chunk<T>(group: readonly T[], size: number) {
     if (group.length === 0) return [];
     if (size <= 0) throw new Error('Chunk size must be greater than 0.')
 
@@ -176,7 +176,7 @@ function chunk<T>(group: readonly T[], size: number) {
     return result;
 }
 
-function zip<T, U>(first: readonly T[], second: readonly U[]) {
+export function zip<T, U>(first: readonly T[], second: readonly U[]) {
     if (first.length === 0 || second.length === 0) return []
 
     const min = Math.min(first.length, second.length)
@@ -189,17 +189,3 @@ function zip<T, U>(first: readonly T[], second: readonly U[]) {
     return result;
 }
 
-export const Utils = {
-    countBy,
-    groupBy,
-    indexBy,
-    findBy,
-    uniqueBy,
-    pluck,
-    partition,
-    sumBy,
-    maxBy,
-    sortBy,
-    chunk,
-    zip
-}
