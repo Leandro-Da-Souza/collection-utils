@@ -30,23 +30,27 @@ function groupBy<T>(
     return result
 }
 
-function indexBy<T extends Record<K, PropertyKey>, K extends keyof T>(
-    group: T[],
-    property: K)
+function indexBy<T>(
+    group: readonly T[],
+    selector: (item: T) => PropertyKey)
 {
     const result: Record<PropertyKey, T> = {}
 
     for (const item of group) {
-        const key = item[property];
+        const key = selector(item);
         result[key] = item
     }
 
     return result;
 }
 
-function findBy<T extends Record<K, PropertyKey>, K extends keyof T>(group: T[], property: K, value: T[K]) {
+function findBy<T, U>(
+    group: T[],
+    selector: (item: T) => U,
+    value: U
+) {
     for (const item of group) {
-        if (item[property] === value) {
+        if (selector(item) === value) {
             return item;
         }
     }

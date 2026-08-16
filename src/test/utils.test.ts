@@ -60,7 +60,7 @@ describe('groupBy', () => {
 
 describe('indexBy', () => {
     it('should index users by Id', () => {
-        const indexedUsers = Utils.indexBy(users, 'id')
+        const indexedUsers = Utils.indexBy(users, user => user.id)
         const expectedUsers = {
             1: { id: 1, name: "Alice", teamId: 342 },
             2: { id: 2, name: "Bob", teamId: 342 },
@@ -74,21 +74,21 @@ describe('indexBy', () => {
 
 describe('findBy', () => {
     it('should find one user by name of Jarvis', () => {
-        const foundUser = Utils.findBy(users, 'name', 'Jarvis')
+        const foundUser = Utils.findBy(users, user => user.name, 'Jarvis')
         const expectedUser = { id: 4, name: 'Jarvis', teamId: 394 }
 
         expect(foundUser).toEqual(expectedUser)
     })
 
     it('should find the first user by name of Alice', () => {
-        const foundUser = Utils.findBy(users, 'name', 'Alice');
+        const foundUser = Utils.findBy(users, user => user.name, 'Alice');
         const expectedUser = { id: 1, name: "Alice", teamId: 342 }
 
         expect(foundUser).toEqual(expectedUser)
     })
 
     it('should return undefined for non existant user', () => {
-        const nonUser = Utils.findBy(users, 'name', 'Marko')
+        const nonUser = Utils.findBy(users, user => user.name, 'Marko')
 
         expect(nonUser).toBe(undefined)
     })
