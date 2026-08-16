@@ -1,6 +1,11 @@
-export function countBy<
-    T
-> (
+/** Aggregation */
+
+/**
+ * Counts the occurrences of each key returned by the selector
+ * @param group
+ * @param selector
+ */
+export function countBy<T> (
     group: readonly T[],
     selector: (item: T) => PropertyKey
 ) {
@@ -16,10 +21,15 @@ export function countBy<
     return result;
 }
 
+/**
+ * Groups items by the key returned from the selector.
+ * @param group
+ * @param selector
+ */
 export function groupBy<T>(
     group: readonly T[],
-    selector: (item: T) => PropertyKey)
-{
+    selector: (item: T) => PropertyKey
+) {
     const result: Record<PropertyKey, T[]> = {};
 
     for (const item of group) {
@@ -30,10 +40,15 @@ export function groupBy<T>(
     return result
 }
 
+/**
+ * Creates a lookup object keyed by the selector.
+ * @param group
+ * @param selector
+ */
 export function indexBy<T>(
     group: readonly T[],
-    selector: (item: T) => PropertyKey)
-{
+    selector: (item: T) => PropertyKey
+) {
     const result: Record<PropertyKey, T> = {}
 
     for (const item of group) {
@@ -44,53 +59,15 @@ export function indexBy<T>(
     return result;
 }
 
-export function findBy<T, U>(
-    group: readonly T[],
-    selector: (item: T) => U,
-    value: U
-) {
-    for (const item of group) {
-        if (selector(item) === value) {
-            return item;
-        }
-    }
-    return undefined;
-}
-
-export function uniqueBy<T>(
-    group: readonly T[],
-    selector: (item: T) => PropertyKey
-){
-    const seen: Record<PropertyKey, true> = {}
-    const result: T[] = [];
-
-    for (const item of group) {
-        const key = selector(item);
-        if (!seen[key]) {
-            seen[key] = true;
-            result.push(item)
-        }
-    }
-    return result
-}
-
-export function pluck<T, U>(
-    group: readonly T[],
-    selector: (item: T) => U
-) {
-    const result: U[] = [];
-
-    for (const item of group) {
-        result.push(selector(item))
-    }
-
-    return result;
-}
-
+/**
+ * Splits the collection into true and false groups based on the predicate.
+ * @param group
+ * @param predicate
+ */
 export function partition<T>(
     group: readonly T[],
-    predicate: (item: T) => boolean)
-{
+    predicate: (item: T) => boolean
+) {
     const result: { true: T[]; false: T[] } = {
         true: [],
         false: []
@@ -107,9 +84,75 @@ export function partition<T>(
     return result;
 }
 
-export function sumBy<
-    T
->(
+/** Selection */
+
+/**
+ * Returns the first item whose selected value equals the given value.
+ * @param group
+ * @param selector
+ * @param value
+ */
+export function findBy<T, U>(
+    group: readonly T[],
+    selector: (item: T) => U,
+    value: U
+) {
+    for (const item of group) {
+        if (selector(item) === value) {
+            return item;
+        }
+    }
+    return undefined;
+}
+
+/**
+ * Returns a new collection containing only the first occurrence of each unique key.
+ * @param group
+ * @param selector
+ */
+export function uniqueBy<T>(
+    group: readonly T[],
+    selector: (item: T) => PropertyKey
+) {
+    const seen: Record<PropertyKey, true> = {}
+    const result: T[] = [];
+
+    for (const item of group) {
+        const key = selector(item);
+        if (!seen[key]) {
+            seen[key] = true;
+            result.push(item)
+        }
+    }
+    return result
+}
+
+/**
+ * Creates a new array containing the values returned by the selector.
+ * @param group
+ * @param selector
+ */
+export function pluck<T, U>(
+    group: readonly T[],
+    selector: (item: T) => U
+) {
+    const result: U[] = [];
+
+    for (const item of group) {
+        result.push(selector(item))
+    }
+
+    return result;
+}
+
+/** Ordering */
+
+/**
+ * Returns the sum of the numeric values produced by the selector.
+ * @param group
+ * @param selector
+ */
+export function sumBy<T>(
     group: readonly T[],
     selector: (item: T) => number
 ) {
@@ -122,6 +165,11 @@ export function sumBy<
     return result;
 }
 
+/**
+ * Returns the item with the highest value produced by the selector.
+ * @param group
+ * @param selector
+ */
 export function maxBy<T>(
     group: readonly T[],
     selector: (item: T) => number
@@ -145,7 +193,15 @@ export function maxBy<T>(
     return result
 }
 
-export function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
+/**
+ * Returns a new array sorted in ascending order by the selector.
+ * @param group
+ * @param selector
+ */
+export function sortBy<T>(
+    group: readonly T[],
+    selector: (item: T) => number
+) {
     if(!group.length) return [];
 
     const sorted: T[] = [...group]
@@ -163,7 +219,17 @@ export function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
     return sorted
 }
 
-export function chunk<T>(group: readonly T[], size: number) {
+/** Collection */
+
+/**
+ * Splits a collection into groups of the given size.
+ * @param group
+ * @param size
+ */
+export function chunk<T>(
+    group: readonly T[],
+    size: number
+) {
     if (group.length === 0) return [];
     if (size <= 0) throw new Error('Chunk size must be greater than 0.')
 
@@ -176,7 +242,15 @@ export function chunk<T>(group: readonly T[], size: number) {
     return result;
 }
 
-export function zip<T, U>(first: readonly T[], second: readonly U[]) {
+/**
+ * Combines two collections into tuples of corresponding items.
+ * @param first
+ * @param second
+ */
+export function zip<T, U>(
+    first: readonly T[],
+    second: readonly U[]
+) {
     if (first.length === 0 || second.length === 0) return []
 
     const min = Math.min(first.length, second.length)
