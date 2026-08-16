@@ -1,15 +1,16 @@
-function countBy<T extends Record<K, PropertyKey>, K extends keyof T> (
-    group: T[],
-    property: K
+function countBy<
+    T
+> (
+    group: readonly T[],
+    selector: (item: T) => PropertyKey
 ) {
     const result: Record<PropertyKey, number> = {}
 
     for (const item of group) {
-        if (!result[item[property]]) {
-            result[item[property]] = 1
-        } else {
-            result[item[property]]++
-        }
+        const key = selector(item);
+
+        if (result[key] === undefined) result[key] = 0;
+        result[key]++;
     }
 
     return result;

@@ -13,7 +13,7 @@ import { users } from '../data/users'
 
 describe('countBy', () => {
     it('should count the users by teamId', () => {
-        const countByTeamId = Utils.countBy(users, 'teamId')
+        const countByTeamId = Utils.countBy(users, user => user.teamId)
         const expectedTeamCount = {
             342: 2,
             351: 1,
@@ -21,17 +21,16 @@ describe('countBy', () => {
             3433: 1
         }
         expect(countByTeamId).toStrictEqual(expectedTeamCount)
-        expect(Utils.countBy([], '')).toStrictEqual({})
     })
     it('should expect Alice to appear twice', () => {
-        const countByName = Utils.countBy(users, "name");
+        const countByName = Utils.countBy(users, user => user.name);
         const expectedAliceNameCount = {
             "Alice": 2
         }
         expect(countByName).toEqual(expect.objectContaining(expectedAliceNameCount))
     })
     it('should give back an empty record when provided with an empty array', () => {
-        const emptyRecord = Utils.countBy([], '')
+        const emptyRecord = Utils.countBy([], () => '')
         expect(emptyRecord).toStrictEqual({})
     })
 })
