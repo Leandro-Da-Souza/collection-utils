@@ -170,17 +170,17 @@ describe('sumBy', () => {
     ];
 
     it('Should sum salaries', () => {
-        const sum = Utils.sumBy(users, 'salary')
+        const sum = Utils.sumBy(users, user => user.salary)
         expect(sum).toBe(500)
     })
 
     it('Should return 0 for an empty array', () => {
-        const sum = Utils.sumBy([], 'salary')
+        const sum = Utils.sumBy([], () => 1)
         expect(sum).toBe(0)
     })
 
     it('Should work with one item', () => {
-        const sum = Utils.sumBy([users[0]], 'salary')
+        const sum = Utils.sumBy([users[0]], user => user.salary)
         expect(sum).toBe(100)
     })
 })

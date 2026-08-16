@@ -87,7 +87,10 @@ function pluck<T, U>(
     return result;
 }
 
-function partition<T>(group: T[], predicate: (item: T) => boolean) {
+function partition<T>(
+    group: readonly T[],
+    predicate: (item: T) => boolean)
+{
     const result: { true: T[]; false: T[] } = {
         true: [],
         false: []
@@ -105,26 +108,25 @@ function partition<T>(group: T[], predicate: (item: T) => boolean) {
 }
 
 function sumBy<
-    T extends Record<K, number>,
-    K extends keyof T
+    T
 >(
-    group: T[],
-    property: K
+    group: readonly T[],
+    selector: (item: T) => number
 ) {
     let result: number = 0;
 
     for (const item of group) {
-        result += item[property]
+        result += selector(item)
     }
 
     return result;
 }
 
 function maxBy<T>(
-    group: T[],
+    group: readonly T[],
     selector: (item: T) => number
 ) {
-    if (group.length == 0) return undefined;
+    if (group.length === 0) return undefined;
 
     const [first, ...rest] = group;
 
@@ -146,19 +148,19 @@ function maxBy<T>(
 function sortBy<T>(group: readonly T[], selector: (item: T) => number) {
     if(!group.length) return [];
 
-    const _mutable: T[] = [...group]
+    const sorted: T[] = [...group]
 
-    for (let i = 0; i < _mutable.length; i++) {
-        for(let j = i + 1; j < _mutable.length; j++) {
-            if (selector(_mutable[i]) > selector(_mutable[j])) {
-                const temp = _mutable[i]
-                _mutable[i] = _mutable[j]
-                _mutable[j] = temp
+    for (let i = 0; i < sorted.length; i++) {
+        for(let j = i + 1; j < sorted.length; j++) {
+            if (selector(sorted[i]) > selector(sorted[j])) {
+                const temp = sorted[i]
+                sorted[i] = sorted[j]
+                sorted[j] = temp
             }
         }
     }
 
-    return _mutable
+    return sorted
 }
 
 function chunk<T>(group: readonly T[], size: number) {
@@ -181,8 +183,7 @@ function zip<T, U>(first: readonly T[], second: readonly U[]) {
     const result: [T,U][] = []
 
     for(let i = 0; i < min; i++) {
-        const subArr:[T, U] = [first[i], second[i]]
-        result.push(subArr)
+        result.push([first[i], second[i]])
     }
 
     return result;
