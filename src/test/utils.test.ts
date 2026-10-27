@@ -320,3 +320,64 @@ describe("prop", () => {
     ]);
   });
 });
+
+describe("propEq", () => {
+  it("should return user Jarvis", () => {
+    const jarvis = users.find(propEq("name")("Jarvis"));
+
+    expect(jarvis).toHaveProperty("name", "Jarvis");
+  });
+
+  it("should fail miserably for user by name of Grub", () => {
+    const grubbo = users.find(propEq("name")("Grub"));
+
+    expect(grubbo).toBeUndefined();
+  });
+});
+
+describe("not", () => {
+  it("should return inactive users by reversing an isActive predicate", () => {
+    const isActive = propEq("active")(true);
+
+    const activeUsers = users.filter(isActive);
+
+    activeUsers.forEach((user) => {
+      expect(user).toHaveProperty("active", true);
+    });
+
+    const inactiveUsers = users.filter(not(isActive));
+
+    inactiveUsers.forEach((user) => {
+      expect(user).toHaveProperty("active", false);
+    });
+  });
+});
+
+describe("pipe", () => {
+  it("should transform 3 to 6", () => {
+    const doubled = pipe(3, (n) => n * 2);
+
+    expect(doubled).toBe(6);
+  });
+
+  it("should take an int, square it, return a string", () => {
+    const magic = pipe(
+      42,
+      (n) => n * n,
+      (m) => m + " is a magic number",
+    );
+
+    expect(magic).toBeTypeOf("string");
+  });
+
+  it("should take an int, square it, append it to a string, return the length of that string", () => {
+    const why = pipe(
+      5,
+      (x) => x * x,
+      (y) => `${y} is ${String(y).length}`,
+      (z) => z.length,
+    );
+
+    expect(why).toBe(7);
+  });
+});
